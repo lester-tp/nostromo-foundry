@@ -12,8 +12,12 @@ license = {text = "MIT"}
 authors = [{name = "Nostromo Labs"}]
 dependencies = ["pandas>=2.0", "pyarrow>=14.0", "h5py>=3.10"]
 
+[project.optional-dependencies]
+ai = ["anthropic>=0.40"]
+
 [project.scripts]
 nostromo-pack = "nostromo_packager.cli:main"
+nostromo-prelabel = "nostromo_packager.prelabel:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

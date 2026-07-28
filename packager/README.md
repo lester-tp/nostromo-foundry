@@ -44,6 +44,22 @@ ep_0001,clips/ep_0001.mp4,fold_towel,"fold the towel in half",success,C014,kitch
 Required: `episode_id, video, task, instruction, outcome`
 (`outcome` ∈ success | failure | recovery). Extra columns ride along as metadata.
 
+## AI-assisted pre-labeling (optional)
+
+`nostromo-prelabel` samples frames from each episode and asks Claude (vision)
+to draft the labels a human then verifies in the QA dashboard:
+
+```bash
+pip install -e ".[ai]"            # adds the anthropic SDK
+export ANTHROPIC_API_KEY=sk-ant-...
+nostromo-prelabel --manifest demo_batch/manifest.csv --out prelabels.json
+# no key / pipeline test:
+nostromo-prelabel --manifest demo_batch/manifest.csv --out prelabels.json --dry-run
+```
+
+The output `prelabels.json` loads straight into `dashboard/index.html`.
+Full loop: **record → prelabel → human review (dashboard) → export reviewed CSV → `nostromo-pack` → deliver.**
+
 ## Design notes
 
 - **Video-first**: human demos carry no robot state; frame tables hold
@@ -59,8 +75,8 @@ pip install pytest && pytest -q
 
 ## Roadmap (Foundry)
 
-1. ✅ Packager CLI (this repo)
-2. QA dashboard — human review UI with AI-assisted pre-labeling (Claude vision)
+1. ✅ Packager CLI + `nostromo-prelabel` (Claude-vision drafts)
+2. ✅ QA dashboard v2 — real manifests, video playback, pre-label import, reviewed-CSV export
 3. Capture PWA — protocol-guided recording for the contributor network
 
 ---

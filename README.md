@@ -5,8 +5,8 @@ data for embodied AI (nostromolabs.lat).
 
 | Module       | Status   | What it does                                            |
 |--------------|----------|---------------------------------------------------------|
-| `packager/`  | ✅ v0.1  | CLI: raw clips + manifest → LeRobot v2 / HDF5 / JSONL   |
-| `dashboard/` | 🧪 skeleton | Human QA review UI with AI-assisted pre-labeling     |
+| `packager/`  | ✅ v0.2  | CLI: clips + manifest → LeRobot v2 / HDF5 / JSONL · `nostromo-prelabel` (Claude vision) |
+| `dashboard/` | ✅ v2    | QA review UI: real manifests, video playback, Claude pre-label import, reviewed-CSV export |
 | capture app  | 🗺 roadmap | Protocol-guided recording PWA for contributors        |
 
 See each module's README/source for details.
