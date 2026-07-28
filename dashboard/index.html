@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nostromo Foundry — QA Dashboard (skeleton)</title>
+<style>
+:root{--void:#07090C;--carbon:#0D1116;--panel:#10151B;--line:#1D2530;
+--titan:#9AA6B2;--steel:#5C6873;--white:#EEF2F6;--amber:#FFB000;--ok:#3ECF8E;--bad:#E24B4A}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--void);color:var(--titan);font:15px/1.5 system-ui,sans-serif;height:100vh;display:flex;flex-direction:column}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 22px;border-bottom:1px solid var(--line)}
+.brand{display:flex;gap:10px;align-items:center;color:var(--white);font-weight:700;letter-spacing:.08em}
+.mark{width:22px;height:22px;border:1.5px solid var(--amber);border-radius:50%;display:grid;place-items:center}
+.mark::before{content:"";width:7px;height:7px;background:var(--amber);border-radius:50%}
+.stats{display:flex;gap:22px;font-family:monospace;font-size:.8rem;color:var(--steel)}
+.stats b{color:var(--white)}
+main{flex:1;display:grid;grid-template-columns:290px 1fr;overflow:hidden}
+/* queue */
+aside{border-right:1px solid var(--line);overflow-y:auto;background:var(--carbon)}
+.q-head{padding:12px 16px;font-family:monospace;font-size:.7rem;letter-spacing:.15em;color:var(--amber);border-bottom:1px solid var(--line)}
+.q-item{padding:12px 16px;border-bottom:1px solid var(--line);cursor:pointer;display:flex;flex-direction:column;gap:3px}
+.q-item:hover{background:var(--panel)}
+.q-item.active{background:var(--panel);border-left:3px solid var(--amber);padding-left:13px}
+.q-item b{color:var(--white);font-family:monospace;font-size:.85rem;font-weight:500}
+.q-item small{color:var(--steel);font-size:.75rem}
+.q-item .st{font-family:monospace;font-size:.7rem}
+.st.pending{color:var(--amber)}.st.approved{color:var(--ok)}.st.rejected{color:var(--bad)}
+/* work area */
+.work{display:grid;grid-template-rows:1fr auto;overflow:hidden}
+.review{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;padding:18px;overflow-y:auto}
+.viewer{background:var(--panel);border:1px solid var(--line);border-radius:12px;display:flex;flex-direction:column}
+.v-head{padding:12px 18px;border-bottom:1px solid var(--line);font-family:monospace;font-size:.75rem;color:var(--steel);display:flex;justify-content:space-between}
+.v-body{flex:1;display:grid;place-items:center;min-height:280px;color:var(--steel);font-family:monospace}
+.v-body .ph{text-align:center}
+.v-body .ph .big{font-size:2.4rem;color:var(--line);letter-spacing:.1em}
+.v-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:4px 16px;padding:12px 18px;border-top:1px solid var(--line);font-family:monospace;font-size:.72rem}
+.v-meta div{display:flex;justify-content:space-between;color:var(--steel)}
+.v-meta b{color:var(--white);font-weight:500}
+/* ai panel */
+.ai{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.ai h2{font-size:.72rem;font-family:monospace;letter-spacing:.15em;color:var(--amber)}
+.badge{display:inline-block;font-family:monospace;font-size:.72rem;padding:4px 10px;border-radius:5px;border:1px solid var(--line)}
+.field label{display:block;font-family:monospace;font-size:.68rem;letter-spacing:.12em;color:var(--steel);margin-bottom:6px;text-transform:uppercase}
+.field textarea,.field select{width:100%;background:var(--carbon);border:1px solid var(--line);border-radius:8px;color:var(--white);padding:10px 12px;font:inherit}
+.field textarea{min-height:64px;resize:vertical}
+.conf{font-family:monospace;font-size:.72rem;color:var(--steel)}
+.conf b{color:var(--ok)}
+.ai .note{font-size:.75rem;color:var(--steel);border-top:1px dashed var(--line);padding-top:12px}
+/* action bar */
+.bar{display:flex;gap:12px;align-items:center;padding:14px 18px;border-top:1px solid var(--line);background:var(--carbon)}
+button{font:600 .85rem/1 system-ui;padding:12px 20px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--white);cursor:pointer}
+button:hover{border-color:var(--amber)}
+.approve{background:var(--ok);border-color:var(--ok);color:#04180D}
+.reject{background:transparent;border-color:var(--bad);color:var(--bad)}
+kbd{font-family:monospace;font-size:.7rem;border:1px solid var(--line);border-radius:4px;padding:2px 6px;color:var(--steel);margin-left:8px}
+.spacer{flex:1}
+.toast{font-family:monospace;font-size:.78rem;color:var(--ok)}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><span class="mark"></span>NOSTROMO&nbsp;FOUNDRY <span style="color:var(--steel);font-weight:400">· QA Dashboard</span></div>
+  <div class="stats">
+    <span>queue <b id="s-q">0</b></span>
+    <span>approved <b id="s-a" style="color:var(--ok)">0</b></span>
+    <span>rejected <b id="s-r" style="color:var(--bad)">0</b></span>
+    <span>batch <b>fold_towel_2026_07</b></span>
+  </div>
+</header>
+<main>
+  <aside>
+    <div class="q-head">EPISODE QUEUE</div>
+    <div id="queue"></div>
+  </aside>
+  <section class="work">
+    <div class="review">
+      <div class="viewer">
+        <div class="v-head"><span id="v-id">—</span><span>cam_main · 30fps</span></div>
+        <div class="v-body"><div class="ph"><div class="big">[ VIDEO ]</div><div>player mounts here — skeleton build</div></div></div>
+        <div class="v-meta">
+          <div><span>task</span><b id="m-task">—</b></div>
+          <div><span>dur</span><b id="m-dur">—</b></div>
+          <div><span>contrib</span><b id="m-con">—</b></div>
+          <div><span>env</span><b id="m-env">—</b></div>
+        </div>
+      </div>
+      <div class="ai">
+        <h2>AI PRE-LABEL — VERIFY BEFORE APPROVING</h2>
+        <div><span class="badge" id="ai-outcome" style="color:var(--ok)">✓ success</span>
+             <span class="conf">  confidence <b id="ai-conf">0.93</b> · claude-vision</span></div>
+        <div class="field">
+          <label>Language instruction (AI draft — editable)</label>
+          <textarea id="ai-instr">fold the towel in half starting from the left edge</textarea>
+        </div>
+        <div class="field">
+          <label>Outcome override</label>
+          <select id="sel-outcome"><option>success</option><option>failure</option><option>recovery</option></select>
+        </div>
+        <p class="note">Pre-labels are drafts generated by the vision model. A human reviewer owns the final label — that trail ships with every dataset.</p>
+      </div>
+    </div>
+    <div class="bar">
+      <button class="approve" onclick="act('approved')">Approve<kbd>A</kbd></button>
+      <button class="reject" onclick="act('rejected')">Reject<kbd>R</kbd></button>
+      <button onclick="focusInstr()">Edit instruction<kbd>E</kbd></button>
+      <span class="spacer"></span>
+      <span class="toast" id="toast"></span>
+    </div>
+  </section>
+</main>
+<script>
+const EPS=[
+ ["ep_0141","fold_towel","42s","C014","kitchen_home_02","success",.93,"fold the towel in half starting from the left edge"],
+ ["ep_0142","fold_towel","38s","C014","kitchen_home_02","success",.91,"fold the towel in half"],
+ ["ep_0143","fold_towel","55s","C019","kitchen_home_05","failure",.84,"attempt to fold the towel — grasp slips at the corner"],
+ ["ep_0144","pour_cup","24s","C007","kitchen_home_01","success",.95,"pour water from the bottle into the cup"],
+ ["ep_0145","pour_cup","29s","C007","kitchen_home_01","recovery",.71,"pour water; spill recovered with cloth"],
+ ["ep_0146","open_drawer","16s","C021","workshop_03","success",.96,"open the top drawer fully"],
+ ["ep_0147","route_cable","64s","C021","workshop_03","success",.78,"route the cable through both clips"],
+ ["ep_0148","route_cable","71s","C019","workshop_03","failure",.66,"route the cable — second clip missed"],
+].map(r=>({id:r[0],task:r[1],dur:r[2],con:r[3],env:r[4],out:r[5],conf:r[6],instr:r[7],status:"pending"}));
+let cur=0;
+const $=id=>document.getElementById(id);
+function renderQueue(){
+  $("queue").innerHTML=EPS.map((e,i)=>`
+   <div class="q-item ${i===cur?'active':''}" onclick="select(${i})">
+     <b>${e.id} <span class="st ${e.status}">· ${e.status}</span></b>
+     <small>${e.task} · ${e.dur} · ${e.con}</small>
+   </div>`).join("");
+  $("s-q").textContent=EPS.filter(e=>e.status==="pending").length;
+  $("s-a").textContent=EPS.filter(e=>e.status==="approved").length;
+  $("s-r").textContent=EPS.filter(e=>e.status==="rejected").length;
+}
+function select(i){
+  cur=i;const e=EPS[i];
+  $("v-id").textContent=e.id+" · "+e.task;
+  $("m-task").textContent=e.task;$("m-dur").textContent=e.dur;
+  $("m-con").textContent=e.con;$("m-env").textContent=e.env;
+  const good=e.out==="success";
+  $("ai-outcome").textContent=(good?"✓ ":"✗ ")+e.out;
+  $("ai-outcome").style.color=good?"var(--ok)":(e.out==="failure"?"var(--bad)":"var(--amber)");
+  $("ai-conf").textContent=e.conf.toFixed(2);
+  $("ai-instr").value=e.instr;
+  $("sel-outcome").value=e.out;
+  renderQueue();
+}
+function act(status){
+  const e=EPS[cur];
+  e.status=status;e.instr=$("ai-instr").value;e.out=$("sel-outcome").value;
+  $("toast").textContent=`${e.id} ${status} · label saved`;
+  const next=EPS.findIndex(x=>x.status==="pending");
+  select(next>=0?next:cur);
+  setTimeout(()=>$("toast").textContent="",1800);
+}
+function focusInstr(){$("ai-instr").focus()}
+document.addEventListener("keydown",ev=>{
+  if(ev.target.tagName==="TEXTAREA"||ev.target.tagName==="SELECT")return;
+  if(ev.key==="a"||ev.key==="A")act("approved");
+  if(ev.key==="r"||ev.key==="R")act("rejected");
+  if(ev.key==="e"||ev.key==="E"){ev.preventDefault();focusInstr()}
+  if(ev.key==="ArrowDown")select(Math.min(cur+1,EPS.length-1));
+  if(ev.key==="ArrowUp")select(Math.max(cur-1,0));
+});
+select(0);
+</script>
+</body>
+</html>
