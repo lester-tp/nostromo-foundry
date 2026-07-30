@@ -131,8 +131,7 @@ export default function Admin() {
                     preload="metadata"
                     className="w-full max-h-[420px] rounded border border-edge bg-black"
                   />
-                  
-                    href={videos[r.id]}
+                  <a                    href={videos[r.id]}
                     download={r.file_name ?? "episodio.mp4"}
                     className="font-mono text-xs text-amber hover:underline mt-1 inline-block">
                     Descargar archivo ↓
