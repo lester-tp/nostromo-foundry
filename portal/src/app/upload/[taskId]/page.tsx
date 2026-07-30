@@ -11,7 +11,10 @@ export default function UploadPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-1">Subir episodio</h1>
+      <div className="flex items-center justify-between mb-1">
+        <h1 className="text-2xl font-bold">Subir episodio</h1>
+        <Link href="/tasks" className="btn-ghost text-sm">&larr; Tareas</Link>
+      </div>
       <p className="font-mono text-xs text-amber mb-6">{slug}</p>
       {epCode ? (
         <div className="card text-center py-10">
