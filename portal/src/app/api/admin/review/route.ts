@@ -1,38 +1,48 @@
 export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
-import { GetObjectCommand } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { r2, BUCKET } from "@/lib/r2";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
-// Devuelve un enlace firmado (1 hora) para reproducir/descargar el video
-// de un episodio. Solo admin (header x-admin-token).
 export async function GET(req: NextRequest) {
   if (req.headers.get("x-admin-token") !== process.env.ADMIN_TOKEN)
     return NextResponse.json({ error: "no" }, { status: 401 });
 
-  const episodeId = req.nextUrl.searchParams.get("id");
-  if (!episodeId)
-    return NextResponse.json({ error: "falta id" }, { status: 400 });
+  const scope = req.nextUrl.searchParams.get("scope"); // "all" | null (pendientes)
 
-  const { data, error } = await supabaseAdmin()
+  let query = supabaseAdmin()
     .from("episodes")
-    .select("storage_key,file_name,content_type")
-    .eq("id", episodeId)
-    .single();
+    .select(
+      "id,ep_code,status,modality,auto_qa,file_name,file_size_bytes,created_at,tasks(title,slug)"
+    );
 
-  if (error || !data?.storage_key)
-    return NextResponse.json({ error: "episodio sin archivo" }, { status: 404 });
+  if (scope === "all") {
+    query = query.order("created_at", { ascending: false }).limit(200);
+  } else {
+    query = query
+      .in("status", ["auto_checked", "in_qa", "uploaded"])
+      .order("created_at", { ascending: true })
+      .limit(100);
+  }
 
-  const url = await getSignedUrl(
-    r2,
-    new GetObjectCommand({
-      Bucket: BUCKET,
-      Key: data.storage_key,
-      ResponseContentType: data.content_type ?? "video/mp4",
-    }),
-    { expiresIn: 3600 }
-  );
+  const { data } = await query;
+  return NextResponse.json({ episodes: data ?? [] });
+}
 
-  return NextResponse.json({ url, file_name: data.file_name });
+export async function POST(req: NextRequest) {
+  if (req.headers.get("x-admin-token") !== process.env.ADMIN_TOKEN)
+    return NextResponse.json({ error: "no" }, { status: 401 });
+  const { episodeId, action, reason, outcome, reviewer } = await req.json();
+  const status = action === "accept" ? "accepted" : "rejected";
+  await supabaseAdmin().from("episodes")
+    .update({
+      status,
+      outcome: action === "accept" ? (outcome ?? "success") : null,
+      reject_reason: reason ?? null,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", episodeId);
+  await supabaseAdmin().from("qa_events").insert({
+    episode_id: episodeId, actor: reviewer ?? "admin", action,
+    detail: { reason, outcome },
+  });
+  return NextResponse.json({ ok: true });
 }
