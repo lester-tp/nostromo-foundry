@@ -1,9 +1,0 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-body { @apply bg-ink text-paper antialiased; }
-.card { @apply bg-panel border border-edge rounded-lg p-5; }
-.btn { @apply inline-flex items-center gap-2 bg-amber text-ink font-bold px-4 py-2 rounded hover:bg-amberhi transition-colors; }
-.btn-ghost { @apply inline-flex items-center gap-2 border border-edge text-paper px-4 py-2 rounded hover:border-amber transition-colors; }
-.tag { @apply font-mono text-xs px-2 py-0.5 rounded border; }
