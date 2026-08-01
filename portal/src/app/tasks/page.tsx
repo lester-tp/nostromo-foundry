@@ -4,6 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase-browser";
 
+// ⚠️ REEMPLAZAR con el enlace real de tu Canal de WhatsApp
+// (WhatsApp → Novedades → + → Nuevo canal → Compartir → Copiar enlace)
+const WHATSAPP_CHANNEL = "https://whatsapp.com/channel/0029VbDep2S6xCSV5vLqS22u";
+
 type Task = {
   id: string; slug: string; title: string; instructions: string;
   camera_protocol: string | null; requires_audio: boolean;
@@ -24,13 +28,27 @@ export default function Tasks() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold">Tareas disponibles</h1>
         <div className="flex gap-2">
           <Link href="/protocolo" className="btn-ghost text-sm">Protocolo</Link>
+          <Link href="/perfil" className="btn-ghost text-sm">Mis datos de pago</Link>
           <Link href="/episodes" className="btn-ghost text-sm">Mis episodios</Link>
         </div>
       </div>
+
+      <a href={WHATSAPP_CHANNEL} target="_blank" rel="noopener"
+        className="card mb-6 flex items-center gap-3 border-amber/50 hover:border-amber transition-colors">
+        <span className="text-2xl">📲</span>
+        <div>
+          <div className="font-bold">Únete al canal de WhatsApp</div>
+          <p className="text-fog text-sm">
+            Ahí anunciamos las tareas nuevas con su pago — sé el primero en enterarte.
+          </p>
+        </div>
+        <span className="ml-auto font-mono text-xs text-amber">UNIRME →</span>
+      </a>
+
       <div className="flex flex-col gap-4">
         {tasks.map((t) => (
           <div key={t.id} className="card">
