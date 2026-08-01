@@ -1,5 +1,8 @@
 import Link from "next/link";
 
+// ⚠️ REEMPLAZAR con el enlace real de tu Canal de WhatsApp
+const WHATSAPP_CHANNEL = "https://whatsapp.com/channel/0029VbDep2S6xCSV5vLqS22u";
+
 export const metadata = { title: "Protocolo de captura — Nostromo Foundry" };
 
 export default function Protocolo() {
@@ -76,10 +79,14 @@ export default function Protocolo() {
           código (EP-0148…), la revisión automática y el resultado quedan
           registrados solos; ya no necesitas planilla ni carpeta de Drive. Cada
           episodio pasa por revisión automática + humana. Los aceptados se pagan
-          a la tarifa de tu lote (SINPE / transferencia / PayPal según tu país);
-          los rechazados por protocolo pueden regrabarse. ¿Dudas? Escríbenos por
-          WhatsApp antes de grabar — una pregunta a tiempo salva un lote entero.
+          a la tarifa de tu lote al método que registres en{" "}
+          <Link href="/perfil" className="text-amber underline">Mis datos de pago</Link>{" "}
+          (Wise, Payoneer, PIX, SINPE o banco según tu país); los rechazados por
+          protocolo pueden regrabarse. ¿Dudas? Escríbenos por WhatsApp antes de
+          grabar — una pregunta a tiempo salva un lote entero.
         </p>
+        <a href={WHATSAPP_CHANNEL} target="_blank" rel="noopener"
+          className="btn text-sm mt-3 inline-block">📲 Canal de WhatsApp — tareas y avisos</a>
       </section>
 
       <div className="text-center mt-8">
