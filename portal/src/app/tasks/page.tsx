@@ -7,6 +7,8 @@ import { supabase } from "@/lib/supabase-browser";
 // ⚠️ REEMPLAZAR con el enlace real de tu Canal de WhatsApp
 // (WhatsApp → Novedades → + → Nuevo canal → Compartir → Copiar enlace)
 const WHATSAPP_CHANNEL = "https://whatsapp.com/channel/0029VbDep2S6xCSV5vLqS22u";
+// Soporte 1 a 1 (WhatsApp Business)
+const WHATSAPP_SOPORTE = "https://wa.me/13055421180?text=Hola%20Nostromo%2C%20tengo%20una%20duda%20sobre%20una%20tarea";
 
 type Task = {
   id: string; slug: string; title: string; instructions: string;
@@ -47,6 +49,11 @@ export default function Tasks() {
           </p>
         </div>
         <span className="ml-auto font-mono text-xs text-amber">UNIRME →</span>
+      </a>
+
+      <a href={WHATSAPP_SOPORTE} target="_blank" rel="noopener"
+        className="mb-6 -mt-3 inline-block font-mono text-xs text-fog hover:text-amber transition-colors">
+        ❓ ¿Dudas antes de grabar? Escríbenos por WhatsApp →
       </a>
 
       <div className="flex flex-col gap-4">
