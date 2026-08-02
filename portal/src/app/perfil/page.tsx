@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase-browser";
 
 // Enlaces de apertura de cuenta (persona natural)
-const WISE_SIGNUP = "https://wise.com/register/";
+const WISE_SIGNUP = "https://wise.com/invite/dic/lesterrobertop";
 const PAYONEER_SIGNUP = "https://www.payoneer.com/";
 
 const METODOS = [
