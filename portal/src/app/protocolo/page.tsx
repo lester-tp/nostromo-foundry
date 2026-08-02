@@ -1,7 +1,8 @@
 import Link from "next/link";
 
-// ⚠️ REEMPLAZAR con el enlace real de tu Canal de WhatsApp
+// Canal de anuncios y WhatsApp de soporte
 const WHATSAPP_CHANNEL = "https://whatsapp.com/channel/0029VbDep2S6xCSV5vLqS22u";
+const WHATSAPP_SOPORTE = "https://wa.me/13055421180?text=Hola%20Nostromo%2C%20tengo%20una%20duda%20sobre%20una%20tarea";
 
 export const metadata = { title: "Protocolo de captura — Nostromo Foundry" };
 
@@ -31,45 +32,25 @@ export default function Protocolo() {
         <ul className="text-sm text-fog leading-relaxed list-disc pl-5 space-y-2">
           <li><b className="text-paper">Privacidad:</b> sin rostros de terceros,
             documentos, pantallas ni placas legibles. Revisa el fondo antes de grabar.</li>
-          <li><b className="text-paper">Honestidad:</b> los fallos reales también se
-            pagan. Nunca actúes un fallo ni edites el video: se sube tal cual salió
-            de la cámara.</li>
-          <li><b className="text-paper">Un intento = un archivo.</b> Si salió mal,
-            el episodio termina igual; el siguiente intento es un archivo nuevo.</li>
-          <li><b className="text-paper">Sin música ni conversaciones de fondo</b> —
-            el audio también es dato.</li>
+          <li><b className="text-paper">Un intento = un archivo:</b> no cortes ni
+            edites; si te equivocas, empieza un archivo nuevo.</li>
+          <li><b className="text-paper">Manos visibles:</b> la cámara debe ver lo
+            que hacen tus manos durante toda la tarea.</li>
+          <li><b className="text-paper">Luz y estabilidad:</b> luz natural o
+            abundante; apoya el teléfono o usa trípode.</li>
+          <li><b className="text-paper">Sigue la instrucción exacta</b> de la
+            tarea, incluida la frase en voz alta si la pide.</li>
         </ul>
       </section>
 
       <section className="card mb-4">
-        <h2 className="font-bold text-amber mb-2">A — Video (moverse y ver)</h2>
-        <p className="text-sm text-fog leading-relaxed">
-          Teléfono al pecho, horizontal, ~30° hacia abajo: en pantalla se ven tus
-          dos manos y toda la superficie. Luz de frente o desde arriba. 1080p,
-          30/60 fps. Estructura: 1 s quieto al inicio → tarea a velocidad
-          natural → 1 s quieto con el resultado visible. Duración típica 20–90 s;
-          más de 3 minutos, la tarea se divide. La variación vale oro: cambia
-          objetos y posiciones — diez episodios variados valen más que veinte
-          idénticos.
-        </p>
-      </section>
-
-      <section className="card mb-4">
-        <h2 className="font-bold text-amber mb-2">B — Voz (entender)</h2>
-        <p className="text-sm text-fog leading-relaxed">
-          Silencio total de fondo. Habla a 20 cm del teléfono, volumen natural.
-          Lee cada enunciado como a un asistente en tu casa, con TU acento — el
-          acento es exactamente lo que buscamos. Si te equivocas, repite el
-          enunciado completo tras una pausa.
-        </p>
-      </section>
-
-      <section className="card mb-4">
-        <h2 className="font-bold text-amber mb-2">C — Audio ambiental (escuchar)</h2>
-        <p className="text-sm text-fog leading-relaxed">
-          10–30 s por evento sonoro, con 3 s de ambiente antes y después.
-          Seguridad primero: nunca provoques sonidos rompiendo cosas.
-        </p>
+        <h2 className="font-bold text-amber mb-2">Especificaciones técnicas</h2>
+        <ul className="text-sm text-fog leading-relaxed list-disc pl-5 space-y-2">
+          <li>Video: 1080p o superior, horizontal u orientación indicada por la tarea.</li>
+          <li>Duración: la que indique la tarea (típicamente 5–300 s).</li>
+          <li>Audio: activado si la tarea lo requiere (di la frase indicada).</li>
+          <li>Formato: MP4 / MOV directo del teléfono, sin compresión de apps de mensajería.</li>
+        </ul>
       </section>
 
       <section className="card mb-4">
@@ -85,8 +66,12 @@ export default function Protocolo() {
           protocolo pueden regrabarse. ¿Dudas? Escríbenos por WhatsApp antes de
           grabar — una pregunta a tiempo salva un lote entero.
         </p>
-        <a href={WHATSAPP_CHANNEL} target="_blank" rel="noopener"
-          className="btn text-sm mt-3 inline-block">📲 Canal de WhatsApp — tareas y avisos</a>
+        <div className="flex flex-wrap gap-3 mt-3">
+          <a href={WHATSAPP_CHANNEL} target="_blank" rel="noopener"
+            className="btn text-sm inline-block">📲 Canal — tareas y avisos</a>
+          <a href={WHATSAPP_SOPORTE} target="_blank" rel="noopener"
+            className="btn-ghost text-sm inline-block">❓ Dudas — chat directo</a>
+        </div>
       </section>
 
       <div className="text-center mt-8">
